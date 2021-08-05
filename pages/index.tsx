@@ -11,6 +11,8 @@ const Index: React.FC = () => {
         <Email key={name} name={name} body={body} />
       ))}
 
+      <div className="margin" />
+
       <style jsx>{`
         .emails {
           display: flex;
@@ -22,13 +24,8 @@ const Index: React.FC = () => {
           height: 100%;
         }
 
-        .emails:last-child:after {
-          content: "";
-          display: block;
-          position: absolute;
-          right: -2rem;
-          width: 2rem;
-          height: 1px;
+        .margin {
+          min-width: 1rem;
         }
       `}</style>
     </div>
