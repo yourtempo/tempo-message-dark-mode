@@ -1,4 +1,5 @@
 import { bunq } from "./bunq";
+import { github } from "./github";
 import { highlightedText } from "./highlighted-text";
 import { intercom } from "./intercom";
 import { komoot } from "./komoot";
@@ -9,6 +10,7 @@ import { twitterMessage } from "./twitter-message";
 
 export const emails = {
   bunq,
+  github,
   highlightedText,
   intercom,
   komoot,

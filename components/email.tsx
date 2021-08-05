@@ -92,8 +92,8 @@ export const Email: React.FC<Props> = ({ name, body }) => {
           display: block;
           border-radius: 8px;
 
-          width: 100%;
           height: 100%;
+          padding: 1rem;
           border: none;
           overflow: auto;
           background-color: ${darkMode ? darkTheme.card.background : "white"};
