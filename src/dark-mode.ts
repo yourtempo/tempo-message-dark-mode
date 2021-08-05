@@ -170,11 +170,14 @@ export const generateInvertedColor = (
     } else {
       // Make sure the contrast stays correct in relation to
       // our not-quite-black background (~15% lightness).
-      const newLightness = ((1 - bgLightness) * lightness + bgLightness) * 100;
-      return parsedColor.lightness(newLightness).hex();
+      const newLightness = (1 - bgLightness) * (1 - lightness) + bgLightness;
+      return parsedColor
+        .lightness(newLightness * 100)
+        .desaturate(lightness - 0.3)
+        .hex();
     }
   } catch (e) {
-    console.log("Cannot parse", color, "on", backgroundColor);
+    console.warn("Cannot parse", color, "on", backgroundColor);
     return color;
   }
 };
@@ -279,7 +282,6 @@ export const generateDarkModeStyles = (
         !bgColor &&
         (!key.startsWith("border") || bgImage[0] !== element)
       ) {
-        element.setAttribute(`data-on-bg-image`, "true");
         continue;
       }
 
