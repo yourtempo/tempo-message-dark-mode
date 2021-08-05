@@ -148,7 +148,7 @@ export const generateInvertedColor = (
     // If the color or its background color
     // is too vibrant, don't invert it
     if (colorIsVibrant || backgroundIsVibrant) {
-      return color;
+      return Color(color).desaturate(0.3).hex();
     }
 
     // Convert almost-white colors to our background color
