@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import { generateDarkModeStyles } from "../src/old-styles";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { generateDarkModeStyles } from "../src/dark-mode";
 import { darkTheme } from "../theme/namedColors";
 
 interface Props {
+  name: string;
   body: string;
 }
 
@@ -12,8 +14,9 @@ const colors = {
   link: darkTheme.accent.primary,
 };
 
-export const Email: React.FC<Props> = ({ body }) => {
+export const Email: React.FC<Props> = ({ name, body }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -25,13 +28,25 @@ export const Email: React.FC<Props> = ({ body }) => {
     doc.write(body);
     doc.close();
 
-    const start = Date.now();
-    generateDarkModeStyles(colors, doc);
-    console.log("Processing took", Date.now() - start, "ms");
-  }, [body, iframeRef]);
+    if (darkMode) {
+      const start = Date.now();
+      generateDarkModeStyles(colors, doc);
+      console.log("Processing took", Date.now() - start, "ms");
+    }
+  }, [body, darkMode, iframeRef]);
 
   return (
     <div className="email">
+      <header>
+        <Link href={`/${name}`}>
+          <a>{name}</a>
+        </Link>
+
+        <button onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? "Make Light" : "Make Dark"}
+        </button>
+      </header>
+
       <iframe
         ref={iframeRef}
         seamless
@@ -40,22 +55,49 @@ export const Email: React.FC<Props> = ({ body }) => {
 
       <style jsx>{`
         .email {
-          background-color: ${darkTheme.card.background};
-          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-          border-radius: 8px;
-          overflow: hidden;
+          display: flex;
+          flex-direction: column;
           width: 780px;
           height: 100%;
           flex-shrink: 0;
         }
 
-        iframe {
-          border-radius: 8px;
+        header {
+          flex: 0;
+          height: 2rem;
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        header a {
+          margin: 0;
+          margin-right: auto;
+          font-size: 1.5rem;
           display: block;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        header button {
           border: none;
-          height: 100%;
+          background: none;
+          color: ${darkTheme.text.mindful};
+          cursor: pointer;
+          font-size: 1rem;
+        }
+
+        iframe {
+          flex-grow: 1;
+          display: block;
+          border-radius: 8px;
+
           width: 100%;
+          height: 100%;
+          border: none;
           overflow: auto;
+          background-color: ${darkMode ? darkTheme.card.background : "white"};
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
         }
       `}</style>
     </div>

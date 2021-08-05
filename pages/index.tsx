@@ -8,7 +8,7 @@ const Index: React.FC = () => {
   return (
     <div className="emails">
       {renderEmails.map(([name, body]) => (
-        <Email key={name} body={body} />
+        <Email key={name} name={name} body={body} />
       ))}
 
       <style jsx>{`
