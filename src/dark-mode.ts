@@ -161,19 +161,16 @@ export const generateInvertedColor = (
       return colors.text;
     }
 
-    const invertedLightness = 1 - parsedColor.lightness() / 100;
+    const lightness = parsedColor.lightness() / 100;
     const bgLightness = Color(colors.bg).lightness() / 100;
 
     if (parsedColor.saturationv() === 0) {
-      const mix = (1 - invertedLightness) * (1 + bgLightness) - bgLightness;
-      return Color(colors.bg)
-        .mix(Color(colors.text), 1 - mix)
-        .hex();
+      const mix = lightness * (1 + bgLightness) - bgLightness;
+      return Color(colors.text).mix(Color(colors.bg), mix).hex();
     } else {
       // Make sure the contrast stays correct in relation to
       // our not-quite-black background (~15% lightness).
-      const newLightness =
-        ((1 - bgLightness) * invertedLightness + bgLightness) * 100;
+      const newLightness = ((1 - bgLightness) * lightness + bgLightness) * 100;
       return parsedColor.lightness(newLightness).hex();
     }
   } catch (e) {
