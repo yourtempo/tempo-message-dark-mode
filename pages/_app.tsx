@@ -1,10 +1,5 @@
 import { AppProps } from "next/app";
 import { darkTheme } from "../theme/namedColors";
-import * as DarkMode from "../src/index";
-
-if (typeof window !== "undefined") {
-  (window as any).DarkMode = DarkMode;
-}
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
