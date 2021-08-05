@@ -1,10 +1,10 @@
 {
   "name": "color-bundle",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/dark-mode.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c rollup.config.js && node stringify.js"
+    "build": "rollup -c rollup.config.js && node stringify.js && tsc -p tsconfig.types.json"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
