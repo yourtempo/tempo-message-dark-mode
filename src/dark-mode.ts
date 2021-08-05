@@ -6,6 +6,7 @@ interface Colors {
   link: string;
 }
 
+/** Returns whether the document has dark mode rules */
 const hasDarkModeRules = (doc: Document) => {
   for (const sheet of doc.styleSheets) {
     for (const rule of sheet.rules) {
@@ -27,6 +28,7 @@ const hasDarkModeRules = (doc: Document) => {
   return false;
 };
 
+/** Returns whether the document has a dark background */
 const hasDarkBackground = (doc: Document) => {
   for (const element of doc.body.children) {
     try {
@@ -36,7 +38,6 @@ const hasDarkBackground = (doc: Document) => {
         element.clientHeight > 200 &&
         parseColor(background[1]).isDark()
       ) {
-        console.log(element, "has a dark background");
         return true;
       }
     } catch (e) {
@@ -56,17 +57,14 @@ export const hasNativeDarkModeSupport = (doc: Document) => {
   );
 
   if (colorSchemeMeta?.getAttribute("content")?.includes("dark")) {
-    console.log("Color scheme meta includes dark");
     return true;
   }
 
   if (hasDarkModeRules(doc)) {
-    console.log("Email has dark mode rules");
     return true;
   }
 
   if (hasDarkBackground(doc)) {
-    console.log("Email has dark background");
     return true;
   }
 
@@ -163,16 +161,19 @@ export const generateInvertedColor = (
       return colors.text;
     }
 
-    // Make sure the contrast stays correct in relation to
-    // our not-quite-black background (~15% lightness).
     const invertedLightness = 1 - parsedColor.lightness() / 100;
+    const bgLightness = Color(colors.bg).lightness() / 100;
 
     if (parsedColor.saturationv() === 0) {
-      return Color(colors.bg).mix(Color(colors.text), invertedLightness).hex();
+      const mix = (1 - invertedLightness) * (1 + bgLightness) - bgLightness;
+      return Color(colors.bg)
+        .mix(Color(colors.text), 1 - mix)
+        .hex();
     } else {
-      const BG_LIGHTNESS = Color(colors.bg).lightness() / 100;
+      // Make sure the contrast stays correct in relation to
+      // our not-quite-black background (~15% lightness).
       const newLightness =
-        ((1 - BG_LIGHTNESS) * invertedLightness + BG_LIGHTNESS) * 100;
+        ((1 - bgLightness) * invertedLightness + bgLightness) * 100;
       return parsedColor.lightness(newLightness).hex();
     }
   } catch (e) {
