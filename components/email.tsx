@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { generateDarkModeStyles } from "../src/dark-mode";
 import { darkTheme } from "../theme/namedColors";
+import prepareMessage from "tempo-message-splitter";
+import iframeContentStyles from "../theme/iframeContentStyles";
 
 interface Props {
   name: string;
@@ -24,8 +26,12 @@ export const Email: React.FC<Props> = ({ name, body }) => {
     const win = iframe?.contentWindow;
     if (!doc || !win) return;
 
+    const { completeHtml } = prepareMessage(body, {
+      includeStyle: iframeContentStyles,
+    });
+
     doc.open();
-    doc.write(body);
+    doc.write(completeHtml);
     doc.close();
 
     if (darkMode) {
@@ -93,7 +99,6 @@ export const Email: React.FC<Props> = ({ name, body }) => {
           border-radius: 8px;
 
           height: 100%;
-          padding: 1rem;
           border: none;
           overflow: auto;
           background-color: ${darkMode ? darkTheme.card.background : "white"};
