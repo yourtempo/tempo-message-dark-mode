@@ -1,5 +1,6 @@
 import { bunq } from "./bunq";
 import { highlightedText } from "./highlighted-text";
+import { intercom } from "./intercom";
 import { komoot } from "./komoot";
 import { netlifyNewsletter } from "./netlify-newsletter";
 import { notion } from "./notion";
@@ -9,6 +10,7 @@ import { twitterMessage } from "./twitter-message";
 export const emails = {
   bunq,
   highlightedText,
+  intercom,
   komoot,
   netlifyNewsletter,
   notion,
